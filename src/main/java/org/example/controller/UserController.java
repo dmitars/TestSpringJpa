@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.model.User;
 import org.example.service.UserService;
+import org.example.validation.ServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ public class UserController {
 
     @GetMapping("/search")
     public List<User> findUsersByName(@RequestParam("name") String name) {
+        if(name == null)
+            throw new ServerException("Name should not be null");
+
         return userService.findAllByName(name);
     }
 

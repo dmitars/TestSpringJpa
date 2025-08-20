@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.model.User;
 import org.example.repo.UserRepository;
+import org.example.validation.ServerException;
 import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +14,17 @@ import java.util.List;
 
 @Service
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public void deleteByName(String name) {
+        if(name == null)
+            throw new ServerException("name must not be null");
+
         userRepository.deleteByName(name);
     }
 
@@ -37,6 +45,9 @@ public class UserService {
     }
 
     public List<User> findAllByName(String name) {
+        if(name == null)
+            throw new ServerException("name must not be null");
+
         return userRepository.findAllByName(name);
     }
 
